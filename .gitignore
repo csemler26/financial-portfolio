@@ -1,0 +1,4 @@
+# Ignore executables
+build/
+*.exe
+*.o

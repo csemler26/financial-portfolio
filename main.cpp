@@ -18,9 +18,9 @@ int main()
 
   while (symbol != "quit" && symbol != "q" && symbol != "exit")
   {
+    cout << "-=-=-=-=-=-=-=-=-=-=-=-=-" << endl;
     cout << "Enter stock symbol: ";
     cin >> symbol;
-    cout << "You entered: " << symbol << endl;
 
     string apiKey = "OK2DWQE7VA4ZPGTH";
     string readBuffer;
