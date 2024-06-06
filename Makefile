@@ -1,5 +1,5 @@
 # Source directory
-SRC_DIR = src
+SRC_DIR = source
 # Object directory
 OBJ_DIR = build
 # include directory
