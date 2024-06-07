@@ -1,5 +1,5 @@
 # Source directory
-SRC_DIR = source
+SRC_DIR = src
 # Object directory
 OBJ_DIR = build
 # include directory
@@ -7,7 +7,7 @@ IDIR = include
 
 # compiler info
 CC = g++
-CFLAGS = -I$(IDIR)
+CFLAGS = -I$(IDIR) -std=c++20
 
 # List of source files (excluding main.cpp)
 SRCS = $(wildcard $(SRC_DIR)/*.cpp)
@@ -35,12 +35,12 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp $(IDIR)/json.h | $(OBJ_DIR)
 
 # Ensure that the object directory exists
 $(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
+	mkdir $(OBJ_DIR)
 
 .PHONY: clean
 
 clean:
-	rm -rf $(OBJ_DIR) $(EXECUTABLE)
+	rm -rf $(OBJ_DIR)
 
 run:
 	./$(OBJ_DIR)/$(EXECUTABLE)
