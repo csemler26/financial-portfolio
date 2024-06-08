@@ -26,11 +26,6 @@ int main()
   while (1)
   {
     cout << "-=-=-=-=-=-=-=-=-=-=-=-=-" << endl;
-    cout << "Available options: " << endl;
-    cout << "    1. look up a stock price" << endl;
-    cout << "    2. buy a stock for my portfolio" << endl;
-    cout << "    3. sell a stock from my portfolio" << endl;
-    cout << "    4. view my portfolio" << endl;
     cout << "Pick an option: ";
     cin >> input;
     cout << "-=-=-=-=-=-=-=-=-=-=-=-=-" << endl;
@@ -40,7 +35,7 @@ int main()
       break;
     }
     // look up a stock price
-    else if (input == "1")
+    else if (input == "price")
     {
       string symbol;
       cout << "Enter stock symbol: ";
@@ -51,7 +46,7 @@ int main()
       cout << stock.symbol << " : " << stock.price << endl;
     }
     // buy a stock for the portfolio
-    else if (input == "2")
+    else if (input == "buy")
     {
       string symbol;
       cout << "Enter stock symbol: ";
@@ -64,7 +59,7 @@ int main()
       portfolio.buyStock(symbol, numOfShares);
     }
     // sell a stock from portfolio
-    else if (input == "3")
+    else if (input == "sell")
     {
       string symbol;
       cout << "Enter stock symbol: ";
@@ -77,9 +72,18 @@ int main()
       portfolio.sellStock(symbol, numOfShares);
     }
     // view my portfolio
-    else if (input == "4")
+    else if (input == "view")
     {      
       portfolio.printPortfolio();
+    }
+    else if (input == "help")
+    {
+      cout << "Available commands: " << endl;
+      cout << "    price    - look up a stock price" << endl;
+      cout << "    buy      - buy a stock for my portfolio" << endl;
+      cout << "    sell     - sell a stock from my portfolio" << endl;
+      cout << "    view     - view my portfolio" << endl;
+      cout << "    exit     - close the program" << endl;
     }
   }
 
