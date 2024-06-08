@@ -6,14 +6,15 @@
 #include <iostream>
 #include <curl/curl.h>
 #include "json.h"
+#include "dataTypes.h"
 
-class DataMarket {
+class StockMarket {
 public:
-  void fetchMarketData(std::string& symbol);
+  Stock fetchMarketData(std::string& symbol);
 
 private:
   static size_t formatDataCallback(void* contents, size_t size, size_t nmemb, void* userp);
-  void printData(std::string& symbol, std::string& readBuffer);
+  Stock parseData(std::string& symbol, std::string& readBuffer);
 };
 
-#endif // PORTFOLIO_H
+#endif // MARKET_H
