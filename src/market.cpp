@@ -4,7 +4,7 @@
 
 using namespace std;
 
-Stock StockMarket::fetchMarketData(std::string &symbol)
+Stock StockMarket::fetchMarketData(std::string& symbol)
 {
   Stock output;
   string apiKey = "OK2DWQE7VA4ZPGTH";

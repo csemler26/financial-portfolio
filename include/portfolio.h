@@ -13,6 +13,8 @@ const std::filesystem::path portfolioPath = "/var/financial-portfolio/portfolio.
 
 class Portfolio {
 public:
+  Portfolio();
+  ~Portfolio();
   void buyStock(std::string& symbol, uint16_t& numOfShares);
   void sellStock(std::string& symbol, uint16_t& numOfShares);
   void printPortfolio();

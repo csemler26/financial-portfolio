@@ -8,6 +8,16 @@
 
 using namespace std;
 
+Portfolio::Portfolio()
+{
+  loadPortfolio();
+}
+
+Portfolio::~Portfolio()
+{
+  savePortfolio();
+}
+
 void Portfolio::buyStock(string& symbol, uint16_t& numOfShares) 
 {
   transform(symbol.begin(), symbol.end(), symbol.begin(), ::toupper);
@@ -50,6 +60,7 @@ void Portfolio::sellStock(string& symbol, uint16_t& numOfShares)
   } else {
     std::cerr << "Error: Not enough shares to sell or stock not found in portfolio." << std::endl;
   }
+  savePortfolio();
 }
 
 void Portfolio::printPortfolio()

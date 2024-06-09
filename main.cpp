@@ -7,6 +7,7 @@
 #include "include/market.h"
 #include "include/portfolio.h"
 #include "include/dataTypes.h"
+#include "include/watchList.h"
 
 using namespace std;
 
@@ -20,6 +21,7 @@ int main()
 {
   string input;
   Portfolio portfolio;
+  WatchList watchlist;
   
   init(portfolio);
 
@@ -43,7 +45,7 @@ int main()
 
       StockMarket market;
       Stock stock = market.fetchMarketData(symbol);
-      cout << stock.symbol << " : " << stock.price << endl;
+      cout << stock.symbol << " : $" << stock.price << endl;
     }
     // buy a stock for the portfolio
     else if (input == "buy")
@@ -73,8 +75,31 @@ int main()
     }
     // view my portfolio
     else if (input == "view")
-    {      
+    {
       portfolio.printPortfolio();
+    }
+    // view my watchlist
+    else if (input == "watch")
+    {
+      watchlist.printWatchList();
+    }
+    // add a stock to my watchlist
+    else if (input == "add")
+    {
+      string symbol;
+      cout << "Enter stock symbol: ";
+      cin >> symbol;
+
+      watchlist.addSymbol(symbol);
+    }
+    // remove a stock to my watchlist
+    else if (input == "remove")
+    {
+      string symbol;
+      cout << "Enter stock symbol: ";
+      cin >> symbol;
+
+      watchlist.removeSymbol(symbol);
     }
     else if (input == "help")
     {
@@ -83,7 +108,15 @@ int main()
       cout << "    buy      - buy a stock for my portfolio" << endl;
       cout << "    sell     - sell a stock from my portfolio" << endl;
       cout << "    view     - view my portfolio" << endl;
+      cout << "    watch    - view your watch list" << endl;
+      cout << "    add      - add a stock to your watch list" << endl;
+      cout << "    remove   - remove a stock to your watch list" << endl;
       cout << "    exit     - close the program" << endl;
+    }
+    else
+    {
+      
+      cout << "Unknown command. say 'help' for more info." << endl;
     }
   }
 
