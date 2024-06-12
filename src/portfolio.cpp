@@ -29,17 +29,17 @@ void Portfolio::buyStock(string& symbol, uint16_t& numOfShares)
   newStock.quantity = numOfShares;
 
   // already own shares
-  if (stocks.find(newStock.symbol) != stocks.end())
+  if (stocks_.find(newStock.symbol) != stocks_.end())
   {
-    int previouslyOwned = stocks[newStock.symbol].quantity;
-    double previousPrice = stocks[newStock.symbol].price;
-    stocks[newStock.symbol].price = ((previousPrice * previouslyOwned) + (newStock.price * newStock.quantity)) / (previouslyOwned + numOfShares);
-    stocks[newStock.symbol].quantity += newStock.quantity;
+    int previouslyOwned = stocks_[newStock.symbol].quantity;
+    double previousPrice = stocks_[newStock.symbol].price;
+    stocks_[newStock.symbol].price = ((previousPrice * previouslyOwned) + (newStock.price * newStock.quantity)) / (previouslyOwned + numOfShares);
+    stocks_[newStock.symbol].quantity += newStock.quantity;
   }
   // new investment
   else
   {
-    stocks[newStock.symbol] = newStock;
+    stocks_[newStock.symbol] = newStock;
     cout << "Successfully bought " << numOfShares << ((numOfShares == 1) ? " share of" : " shares of ") << symbol << endl;
   }
   savePortfolio();
@@ -50,12 +50,12 @@ void Portfolio::sellStock(string& symbol, uint16_t& numOfShares)
   transform(symbol.begin(), symbol.end(), symbol.begin(), ::toupper);
   cout << "Selling " << numOfShares << ((numOfShares == 1) ? " share of " : " shares of " ) << symbol << endl;
 
-  auto it = stocks.find(symbol);
-  if (it != stocks.end() && it->second.quantity >= numOfShares) {
+  auto it = stocks_.find(symbol);
+  if (it != stocks_.end() && it->second.quantity >= numOfShares) {
     it->second.quantity -= numOfShares;
     std::cout << "Sold " << numOfShares << ((numOfShares == 1) ? " share of " : " shares of " ) << symbol << std::endl;
     if (it->second.quantity == 0) {
-      stocks.erase(it);
+      stocks_.erase(it);
     }
   } else {
     std::cerr << "Error: Not enough shares to sell or stock not found in portfolio." << std::endl;
@@ -66,7 +66,7 @@ void Portfolio::sellStock(string& symbol, uint16_t& numOfShares)
 void Portfolio::printPortfolio()
 {
   cout << "Your portfolio:" << endl;
-  for (const auto& stockPair : stocks)
+  for (const auto& stockPair : stocks_)
   {
     std::cout << "Symbol: " << stockPair.second.symbol
               << ", Quantity: " << stockPair.second.quantity
@@ -86,7 +86,7 @@ void Portfolio::savePortfolio()
     return;
   }
 
-  for (const auto& investment : stocks)
+  for (const auto& investment : stocks_)
   {
     outFile << investment.second.symbol << ":" << investment.second.quantity << ":" << investment.second.price << "\n";
   }
@@ -109,7 +109,7 @@ void Portfolio::loadPortfolio()
     while (getline(file, line))
     {
       Stock newStock = parsePortfolio(line);
-      stocks[newStock.symbol] = newStock;
+      stocks_[newStock.symbol] = newStock;
     }
 
     file.close();

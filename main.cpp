@@ -7,7 +7,7 @@
 #include "include/market.h"
 #include "include/portfolio.h"
 #include "include/dataTypes.h"
-#include "include/watchList.h"
+#include "include/watchlist.h"
 
 using namespace std;
 
@@ -21,7 +21,7 @@ int main()
 {
   string input;
   Portfolio portfolio;
-  WatchList watchlist;
+  Watchlist watchlist;
   
   init(portfolio);
 

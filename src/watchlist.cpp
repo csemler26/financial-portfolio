@@ -1,4 +1,4 @@
-#include "watchList.h"
+#include "watchlist.h"
 #include "market.h"
 #include <iostream>
 #include <iomanip>
@@ -9,44 +9,43 @@
 
 using namespace std;
 
-WatchList::WatchList()
+Watchlist::Watchlist()
 {
-  loadWatchList();
+  loadWatchlist();
 }
 
-WatchList::~WatchList()
+Watchlist::~Watchlist()
 {
-  saveWatchList();
+  saveWatchlist();
 }
 
-void WatchList::addSymbol(std::string &symbol)
+void Watchlist::addSymbol(std::string &symbol)
 {
-  stocks.push_back(symbol);
-  saveWatchList();
+  stocks_.push_back(symbol);
+  saveWatchlist();
   cout << "Successfully added " << symbol << " from the watchlist" << endl;
 }
 
-void WatchList::removeSymbol(std::string &symbol)
+void Watchlist::removeSymbol(std::string &symbol)
 {
-  stocks.erase(std::remove(stocks.begin(), stocks.end(), symbol), stocks.end());
-  saveWatchList();
+  stocks_.erase(std::remove(stocks_.begin(), stocks_.end(), symbol), stocks_.end());
+  saveWatchlist();
   cout << "Successfully removed " << symbol << " from the watchlist" << endl;
 }
 
-// void WatchList::fetchStockData()
-void WatchList::fetchStockData(std::string& symbol)
+void Watchlist::fetchStockData(std::string& symbol)
 {
   StockMarket market;
   Stock stock = market.fetchMarketData(symbol);
 
-  lock_guard<mutex> guard(printMutex);
+  lock_guard<mutex> guard(printMutex_);
   cout << stock.symbol << " : $" << stock.price << endl;
 }
 
-void WatchList::printWatchList()
+void Watchlist::printWatchList()
 {
   std::vector<std::thread> threads;
-  for (auto& stock : stocks) {
+  for (auto& stock : stocks_) {
     threads.emplace_back([this, &stock]() {
       this->fetchStockData(stock);
     });
@@ -57,11 +56,11 @@ void WatchList::printWatchList()
   }
 }
 
-void WatchList::saveWatchList()
+void Watchlist::saveWatchlist()
 {
-  std::ofstream file(watchListPath);
+  std::ofstream file(watchlistPath);
   if (file.is_open()) {
-    for (const auto& stock : stocks) {
+    for (const auto& stock : stocks_) {
         file << stock << std::endl;
     }
     file.close();
@@ -70,13 +69,13 @@ void WatchList::saveWatchList()
   }
 }
 
-void WatchList::loadWatchList()
+void Watchlist::loadWatchlist()
 {
-  std::ifstream file(watchListPath);
+  std::ifstream file(watchlistPath);
   if (file.is_open()) {
     std::string line;
     while (std::getline(file, line)) {
-      stocks.push_back(line);
+      stocks_.push_back(line);
     }
     file.close();
   } else {

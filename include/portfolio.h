@@ -24,7 +24,7 @@ public:
 private:
   Stock parsePortfolio(std::string& line);
 
-  std::unordered_map<std::string, Stock> stocks;
+  std::unordered_map<std::string, Stock> stocks_;
 };
 
 #endif // PORTFOLIO_H

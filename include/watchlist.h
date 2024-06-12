@@ -11,23 +11,23 @@
 #include "dataTypes.h"
 #include "market.h"
 
-const std::filesystem::path watchListPath = "/var/financial-portfolio/watchList.txt";
+const std::filesystem::path watchlistPath = "/var/financial-portfolio/watchlist.txt";
 
-class WatchList {
+class Watchlist {
 public:
-  WatchList();
-  ~WatchList();
+  Watchlist();
+  ~Watchlist();
   void addSymbol(std::string& symbol);
   void removeSymbol(std::string& symbol);
   void printWatchList();
 
 private:
-  void saveWatchList();
-  void loadWatchList();
+  void saveWatchlist();
+  void loadWatchlist();
   void fetchStockData(std::string& symbol);
 
-  std::vector<std::string> stocks;
-  std::mutex printMutex;
+  std::vector<std::string> stocks_;
+  std::mutex printMutex_;
 };
 
 #endif // WATCHLIST_H
