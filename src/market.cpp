@@ -50,15 +50,17 @@ size_t StockMarket::formatDataCallback(void *contents, size_t size, size_t nmemb
 Stock StockMarket::parseData(string& symbol, string& readBuffer)
 {
   Stock output;
-  try {
+  try 
+  {
     auto jsonData = nlohmann::json::parse(readBuffer);
     string priceStr = jsonData["Global Quote"]["05. price"];
     double price = stod(priceStr);
     transform(symbol.begin(), symbol.end(), symbol.begin(), ::toupper);
     output.symbol = symbol;
-    // cout << "Price: $" << fixed << setprecision(2) << price << endl;
     output.price = price;
-  } catch (const exception& e) {
+  } 
+  catch (const exception& e) 
+  {
     cerr << "Failed to parse JSON: " << e.what() << endl;
   }    
 
