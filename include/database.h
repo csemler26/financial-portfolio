@@ -6,9 +6,9 @@
 
 class Database {
 public:
-  Database(const std::string& db_file);
+  Database(const std::string& dbFile);
   ~Database();
-  bool executeScript(const std::string& script_file);
+  bool executeScript(const std::string& scriptFilePath);
 private:
   sqlite3* db_;
 };
