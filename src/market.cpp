@@ -56,7 +56,6 @@ Stock StockMarket::parseData(string& symbol, string& readBuffer)
     double price = stod(priceStr);
     transform(symbol.begin(), symbol.end(), symbol.begin(), ::toupper);
     output.symbol = symbol;
-    output.quantity = 0;
     // cout << "Price: $" << fixed << setprecision(2) << price << endl;
     output.price = price;
   } catch (const exception& e) {

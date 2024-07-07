@@ -5,8 +5,14 @@
 
 typedef struct stock_t {
   std::string symbol;
-  int quantity;
+  std::string name;
   double price;
 } Stock;
+
+typedef struct investment_t {
+  std::string symbol;
+  int quantity;
+  double price;
+} Investment;
 
 #endif // DATATYPES_H

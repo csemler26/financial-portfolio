@@ -18,59 +18,78 @@ Portfolio::~Portfolio()
   savePortfolio();
 }
 
-void Portfolio::buyStock(string& symbol, uint16_t& numOfShares) 
+bool Portfolio::buyStock(string& symbol, uint16_t& numOfShares) 
 {
   transform(symbol.begin(), symbol.end(), symbol.begin(), ::toupper);
   cout << "Buying " << numOfShares << ((numOfShares == 1) ? " share of " : " shares of " ) << symbol << endl;
 
-  Stock newStock;
+  Investment stockToBuy;
   StockMarket market;
-  newStock = market.fetchMarketData(symbol);
-  newStock.quantity = numOfShares;
+  Stock tempStock = market.fetchMarketData(symbol);
+  if (tempStock.symbol == "")
+  {
+    cerr << "Error: Unable to fetch market data for " << symbol << " stock" << endl;
+    return -1;
+  }
+  else
+  {
+    stockToBuy.symbol = tempStock.symbol;
+    stockToBuy.price = tempStock.price;
+    stockToBuy.quantity = numOfShares;
+  }
 
   // already own shares
-  if (stocks_.find(newStock.symbol) != stocks_.end())
+  if (investments_.find(stockToBuy.symbol) != investments_.end())
   {
-    int previouslyOwned = stocks_[newStock.symbol].quantity;
-    double previousPrice = stocks_[newStock.symbol].price;
-    stocks_[newStock.symbol].price = ((previousPrice * previouslyOwned) + (newStock.price * newStock.quantity)) / (previouslyOwned + numOfShares);
-    stocks_[newStock.symbol].quantity += newStock.quantity;
+    int previouslyOwned = investments_[stockToBuy.symbol].quantity;
+    double previousPrice = investments_[stockToBuy.symbol].price;
+    investments_[stockToBuy.symbol].price = ((previousPrice * previouslyOwned) + (stockToBuy.price * stockToBuy.quantity)) / (previouslyOwned + numOfShares);
+    investments_[stockToBuy.symbol].quantity += stockToBuy.quantity;
   }
   // new investment
   else
   {
-    stocks_[newStock.symbol] = newStock;
+    investments_[stockToBuy.symbol] = stockToBuy;
     cout << "Successfully bought " << numOfShares << ((numOfShares == 1) ? " share of" : " shares of ") << symbol << endl;
   }
   savePortfolio();
+  return 0;
 }
 
-void Portfolio::sellStock(string& symbol, uint16_t& numOfShares)
+bool Portfolio::sellStock(string& symbol, uint16_t& numOfShares)
 {
   transform(symbol.begin(), symbol.end(), symbol.begin(), ::toupper);
   cout << "Selling " << numOfShares << ((numOfShares == 1) ? " share of " : " shares of " ) << symbol << endl;
 
-  auto it = stocks_.find(symbol);
-  if (it != stocks_.end() && it->second.quantity >= numOfShares) {
+  auto it = investments_.find(symbol);
+  if (it != investments_.end() && it->second.quantity >= numOfShares) 
+  {
     it->second.quantity -= numOfShares;
     std::cout << "Sold " << numOfShares << ((numOfShares == 1) ? " share of " : " shares of " ) << symbol << std::endl;
-    if (it->second.quantity == 0) {
-      stocks_.erase(it);
+    if (it->second.quantity == 0) 
+    {
+      investments_.erase(it);
     }
-  } else {
-    std::cerr << "Error: Not enough shares to sell or stock not found in portfolio." << std::endl;
   }
+  else 
+  {
+    std::cerr << "Error: Not enough shares to sell or stock not found in portfolio." << std::endl;
+    return -1;
+  }
+
   savePortfolio();
+  return 0;
 }
 
 void Portfolio::printPortfolio()
 {
   cout << "Your portfolio:" << endl;
-  for (const auto& stockPair : stocks_)
+  for (const auto& stockPair : investments_)
   {
     std::cout << "Symbol: " << stockPair.second.symbol
               << ", Quantity: " << stockPair.second.quantity
-              << ", Average Price: " << stockPair.second.price << std::endl;
+              << std::fixed << std::setprecision(2) 
+              << ", Average Price: $" << stockPair.second.price << std::endl;
   }
 }
 
@@ -86,7 +105,7 @@ void Portfolio::savePortfolio()
     return;
   }
 
-  for (const auto& investment : stocks_)
+  for (const auto& investment : investments_)
   {
     outFile << investment.second.symbol << ":" << investment.second.quantity << ":" << investment.second.price << "\n";
   }
@@ -108,8 +127,8 @@ void Portfolio::loadPortfolio()
     string line;
     while (getline(file, line))
     {
-      Stock newStock = parsePortfolio(line);
-      stocks_[newStock.symbol] = newStock;
+      Investment newStock = parsePortfolio(line);
+      investments_[newStock.symbol] = newStock;
     }
 
     file.close();
@@ -120,10 +139,10 @@ void Portfolio::loadPortfolio()
   }
 }
 
-Stock Portfolio::parsePortfolio(string& line)
+Investment Portfolio::parsePortfolio(string& line)
 {
   const char delimiter = ':';
-  Stock newStock;
+  Investment newStock;
   stringstream ss(line);
 
   string symbol;

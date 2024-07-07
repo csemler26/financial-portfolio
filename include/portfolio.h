@@ -15,16 +15,16 @@ class Portfolio {
 public:
   Portfolio();
   ~Portfolio();
-  void buyStock(std::string& symbol, uint16_t& numOfShares);
-  void sellStock(std::string& symbol, uint16_t& numOfShares);
+  bool buyStock(std::string& symbol, uint16_t& numOfShares);
+  bool sellStock(std::string& symbol, uint16_t& numOfShares);
   void printPortfolio();
   void savePortfolio();
   void loadPortfolio();
 
 private:
-  Stock parsePortfolio(std::string& line);
+  Investment parsePortfolio(std::string& line);
 
-  std::unordered_map<std::string, Stock> stocks_;
+  std::unordered_map<std::string, Investment> investments_;
 };
 
 #endif // PORTFOLIO_H
