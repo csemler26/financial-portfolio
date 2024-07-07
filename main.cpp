@@ -8,6 +8,7 @@
 #include "include/portfolio.h"
 #include "include/dataTypes.h"
 #include "include/watchlist.h"
+#include "include/database.h"
 
 using namespace std;
 
@@ -22,6 +23,7 @@ int main()
   string input;
   Portfolio portfolio;
   Watchlist watchlist;
+  Database db("financial_portfolio.db");
   
   init(portfolio);
 
@@ -100,6 +102,18 @@ int main()
       cin >> symbol;
 
       watchlist.removeSymbol(symbol);
+    }
+    // open database
+    else if (input == "db" || input == "database")
+    {
+      if (db.executeScript("database/createTables.sql")) 
+      {
+        cout << "Tables created successfully." << endl;
+      } 
+      else 
+      {
+        cerr << "Failed to create tables." << endl;
+      }
     }
     else if (input == "help")
     {

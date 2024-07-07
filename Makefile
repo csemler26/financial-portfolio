@@ -18,8 +18,8 @@ OBJS = $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRCS))
 # Executable name
 EXECUTABLE = my_program
 
-# Libraries needed for cURL
-LIBS = -lcurl
+# External Libraries
+LIBS = -lcurl -lsqlite3
 
 # Rule to build the executable
 $(EXECUTABLE): $(OBJ_DIR)/main.o $(OBJS)
