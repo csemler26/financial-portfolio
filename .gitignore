@@ -2,3 +2,6 @@
 build/
 *.exe
 *.o
+
+# Submodule builds
+UltimateDSA/build
