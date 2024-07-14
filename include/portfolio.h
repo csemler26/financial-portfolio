@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <filesystem>
-#include <unordered_map>
+#include "../UltimateDSA/include/unordered_map.h"
 #include <curl/curl.h>
 #include "json.h"
 #include "dataTypes.h"
@@ -24,7 +24,7 @@ public:
 private:
   Investment parsePortfolio(std::string& line);
 
-  std::unordered_map<std::string, Investment> investments_;
+  DSA::UnorderedMap<std::string, Investment> investments_;
 };
 
 #endif // PORTFOLIO_H

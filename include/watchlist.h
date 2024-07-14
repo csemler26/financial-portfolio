@@ -5,7 +5,6 @@
 #include <vector>
 #include <mutex>
 #include <filesystem>
-#include <unordered_map>
 #include <curl/curl.h>
 #include "json.h"
 #include "dataTypes.h"

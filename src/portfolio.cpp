@@ -39,7 +39,7 @@ bool Portfolio::buyStock(string& symbol, uint16_t& numOfShares)
   }
 
   // already own shares
-  if (investments_.find(stockToBuy.symbol) != investments_.end())
+  if (investments_.find(stockToBuy.symbol) != nullptr)
   {
     int previouslyOwned = investments_[stockToBuy.symbol].quantity;
     double previousPrice = investments_[stockToBuy.symbol].price;
@@ -62,21 +62,29 @@ bool Portfolio::sellStock(string& symbol, uint16_t& numOfShares)
   cout << "Selling " << numOfShares << ((numOfShares == 1) ? " share of " : " shares of " ) << symbol << endl;
 
   auto it = investments_.find(symbol);
-  if (it != investments_.end() && it->second.quantity >= numOfShares) 
+  if (it != nullptr)
   {
-    it->second.quantity -= numOfShares;
-    std::cout << "Sold " << numOfShares << ((numOfShares == 1) ? " share of " : " shares of " ) << symbol << std::endl;
-    if (it->second.quantity == 0) 
+    if (it->quantity >= numOfShares) 
     {
-      investments_.erase(it);
+      it->quantity -= numOfShares;
+      std::cout << "Sold " << numOfShares << ((numOfShares == 1) ? " share of " : " shares of " ) << symbol << std::endl;
+      if (it->quantity == 0) 
+      {
+        investments_.erase(symbol);
+      }
+    }
+    else 
+    {
+      std::cerr << "Error: Not enough shares to sell in portfolio." << std::endl;
+      return -1;
     }
   }
-  else 
+  else
   {
-    std::cerr << "Error: Not enough shares to sell or stock not found in portfolio." << std::endl;
+    std::cerr << "Error: S not found in portfolio." << std::endl;
     return -1;
   }
-
+  
   savePortfolio();
   return 0;
 }
