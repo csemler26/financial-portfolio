@@ -2,10 +2,10 @@
 #define WATCHLIST_H
 
 #include <string>
-#include <vector>
 #include <mutex>
 #include <filesystem>
 #include <curl/curl.h>
+#include "../UltimateDSA/include/vector.h"
 #include "json.h"
 #include "dataTypes.h"
 #include "market.h"
@@ -25,7 +25,7 @@ private:
   void loadWatchlist();
   void fetchStockData(std::string& symbol);
 
-  std::vector<std::string> stocks_;
+  DSA::Vector<std::string> stocks_;
   std::mutex printMutex_;
 };
 

@@ -28,7 +28,7 @@ void Watchlist::addSymbol(std::string &symbol)
 
 void Watchlist::removeSymbol(std::string &symbol)
 {
-  stocks_.erase(std::remove(stocks_.begin(), stocks_.end(), symbol), stocks_.end());
+  stocks_.erase(symbol);
   saveWatchlist();
   cout << "Successfully removed " << symbol << " from the watchlist" << endl;
 }
