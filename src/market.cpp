@@ -7,13 +7,13 @@ using namespace std;
 Stock StockMarket::fetchMarketData(std::string& symbol)
 {
   Stock output;
-  string apiKey = "OK2DWQE7VA4ZPGTH";
+  const char* api_key = std::getenv("API_KEY");
   string readBuffer;
 
   CURL* curl = curl_easy_init();
   if (curl) 
   {
-    string url = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" + symbol + "&apikey=" + apiKey;
+    string url = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" + symbol + "&apikey=" + api_key;
 
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, formatDataCallback);
