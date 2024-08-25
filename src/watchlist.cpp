@@ -63,17 +63,17 @@ void Watchlist::printWatchList()
 
 void Watchlist::saveWatchlist()
 {
-  cout << "Saving watchlist at " << watchlistPath << endl;
-  ofstream outFile(watchlistPath);
+  cout << "Saving watchlist at " << WATCHLIST_PATH << endl;
+  ofstream outFile(WATCHLIST_PATH);
   if (!outFile) 
   {
-    cerr << "Error saving watchlist: " << watchlistPath << endl;
+    cerr << "Error saving watchlist: " << WATCHLIST_PATH << endl;
     return;
   }
   
   for (const auto& stock : stocks_) 
   {
-      outFile << stock << endl;
+    outFile << stock << endl;
   }
 
   outFile.close();
@@ -81,13 +81,13 @@ void Watchlist::saveWatchlist()
 
 void Watchlist::loadWatchlist()
 {
-  if (!filesystem::exists(watchlistPath))
+  if (!filesystem::exists(WATCHLIST_PATH))
   {
-    cerr << "File does not exist at " << watchlistPath << endl;
+    cerr << "File does not exist at " << WATCHLIST_PATH << endl;
     return;
   }
 
-  ifstream file(watchlistPath);
+  ifstream file(WATCHLIST_PATH);
   if (file.is_open())
   {
     string line;
@@ -99,7 +99,7 @@ void Watchlist::loadWatchlist()
   }
   else
   {
-    cerr << "Failed to open file: " << watchlistPath << endl;
+    cerr << "Failed to open file: " << WATCHLIST_PATH << endl;
   }
 }
 

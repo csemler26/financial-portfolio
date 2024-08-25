@@ -10,7 +10,7 @@
 #include "dataTypes.h"
 #include "market.h"
 
-const std::filesystem::path watchlistPath = "/var/financial-portfolio/watchlist.txt";
+const std::filesystem::path WATCHLIST_PATH = "/var/financial-portfolio/watchlist.txt";
 
 class Watchlist {
 public:

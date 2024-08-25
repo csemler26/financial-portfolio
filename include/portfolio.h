@@ -8,7 +8,7 @@
 #include "json.h"
 #include "dataTypes.h"
 
-const std::filesystem::path portfolioPath = "/var/financial-portfolio/portfolio.txt";
+const std::filesystem::path PORTFOLIO_PATH = "/var/financial-portfolio/portfolio.txt";
 
 class Portfolio {
 public:

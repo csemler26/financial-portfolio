@@ -75,13 +75,13 @@ bool Portfolio::sellStock(string& symbol, uint16_t& numOfShares)
     }
     else 
     {
-      std::cerr << "Error: Not enough shares to sell in portfolio." << std::endl;
+      std::cerr << "Error: Not enough shares of " << symbol << " to sell in portfolio." << std::endl;
       return -1;
     }
   }
   else
   {
-    std::cerr << "Error: S not found in portfolio." << std::endl;
+    std::cerr << "Error: " << symbol << " not found in portfolio." << std::endl;
     return -1;
   }
   
@@ -103,13 +103,13 @@ void Portfolio::printPortfolio()
 
 void Portfolio::savePortfolio()
 {
-  cout << "Saving portfolio at " << portfolioPath << endl;
+  cout << "Saving portfolio at " << PORTFOLIO_PATH << endl;
 
-  ofstream outFile(portfolioPath);
+  ofstream outFile(PORTFOLIO_PATH);
 
   if (!outFile)
   {
-    cerr << "Error saving portfolio: " << portfolioPath << endl;
+    cerr << "Error saving portfolio: " << PORTFOLIO_PATH << endl;
     return;
   }
 
@@ -123,13 +123,13 @@ void Portfolio::savePortfolio()
 
 void Portfolio::loadPortfolio()
 {
-  if (!filesystem::exists(portfolioPath))
+  if (!filesystem::exists(PORTFOLIO_PATH))
   {
-    cerr << "File does not exist at " << portfolioPath << endl;
+    cerr << "File does not exist at " << PORTFOLIO_PATH << endl;
     return;
   }
 
-  ifstream file(portfolioPath);
+  ifstream file(PORTFOLIO_PATH);
   if (file.is_open())
   {
     string line;
@@ -143,7 +143,7 @@ void Portfolio::loadPortfolio()
   }
   else
   {
-    cerr << "Failed to open file: " << portfolioPath << endl;
+    cerr << "Failed to open file: " << PORTFOLIO_PATH << endl;
   }
 }
 

@@ -5,3 +5,6 @@ build/
 
 # Submodule builds
 UltimateDSA/build
+
+# Environment specific files
+.env
