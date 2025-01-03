@@ -64,11 +64,11 @@ bool Portfolio::sellStock(string& symbol, uint16_t& numOfShares)
   auto it = investments_.find(symbol);
   if (it != nullptr)
   {
-    if (it->quantity >= numOfShares) 
+    if (it->second.quantity >= numOfShares) 
     {
-      it->quantity -= numOfShares;
+      it->second.quantity -= numOfShares;
       std::cout << "Sold " << numOfShares << ((numOfShares == 1) ? " share of " : " shares of " ) << symbol << std::endl;
-      if (it->quantity == 0) 
+      if (it->second.quantity == 0) 
       {
         investments_.erase(symbol);
       }

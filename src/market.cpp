@@ -4,7 +4,7 @@
 
 using namespace std;
 
-Stock StockMarket::fetchMarketData(std::string& symbol)
+Stock StockMarket::fetchMarketData(const std::string& symbol)
 {
   Stock output;
   const char* api_key = std::getenv("API_KEY");
@@ -47,7 +47,7 @@ size_t StockMarket::formatDataCallback(void *contents, size_t size, size_t nmemb
   return totalSize;
 }
 
-Stock StockMarket::parseData(string& symbol, string& readBuffer)
+Stock StockMarket::parseData(const string& symbol, string& readBuffer)
 {
   Stock output;
   try 
@@ -55,7 +55,8 @@ Stock StockMarket::parseData(string& symbol, string& readBuffer)
     auto jsonData = nlohmann::json::parse(readBuffer);
     string priceStr = jsonData["Global Quote"]["05. price"];
     double price = stod(priceStr);
-    transform(symbol.begin(), symbol.end(), symbol.begin(), ::toupper);
+    string symbolUpper;
+    transform(symbol.begin(), symbol.end(), symbolUpper.begin(), ::toupper);
     output.symbol = symbol;
     output.price = price;
   } 

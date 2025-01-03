@@ -3,7 +3,6 @@
 
 #include <string>
 #include <filesystem>
-#include "../UltimateDSA/include/unordered_map.h"
 #include <curl/curl.h>
 #include "json.h"
 #include "dataTypes.h"
@@ -23,7 +22,7 @@ public:
 private:
   Investment parsePortfolio(std::string& line);
 
-  DSA::UnorderedMap<std::string, Investment> investments_;
+  UnorderedMap<std::string, Investment> investments_;
 };
 
 #endif // PORTFOLIO_H

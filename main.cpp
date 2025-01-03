@@ -3,10 +3,10 @@
 #include <iomanip>
 #include <filesystem>
 #include <curl/curl.h>
+#include "include/dataTypes.h"
 #include "include/json.h"
 #include "include/market.h"
 #include "include/portfolio.h"
-#include "include/dataTypes.h"
 #include "include/watchlist.h"
 #include "include/database.h"
 #include "include/parameterManager.h"
@@ -84,7 +84,7 @@ int main()
       portfolio.printPortfolio();
     }
     // view my watchlist
-    else if (input == "watch")
+    else if (input == "watch" || input == "watchlist")
     {
       watchlist.printWatchList();
     }

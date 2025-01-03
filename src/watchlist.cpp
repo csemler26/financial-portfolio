@@ -21,7 +21,14 @@ Watchlist::~Watchlist()
 
 void Watchlist::addSymbol(std::string &symbol)
 {
-  stocks_.push_back(symbol);
+  // skip if duplicate
+  if (stocks_.find(symbol) != stocks_.end())
+  {
+    cout << "Symbol already exists in the watchlist" << endl;
+    return;
+  }
+
+  stocks_.insert(symbol);
   saveWatchlist();
   cout << "Successfully added " << symbol << " from the watchlist" << endl;
 }
@@ -33,7 +40,7 @@ void Watchlist::removeSymbol(std::string &symbol)
   cout << "Successfully removed " << symbol << " from the watchlist" << endl;
 }
 
-void Watchlist::fetchStockData(std::string& symbol)
+void Watchlist::fetchStockData(const std::string& symbol)
 {
   StockMarket market;
   Stock stock = market.fetchMarketData(symbol);
@@ -93,7 +100,7 @@ void Watchlist::loadWatchlist()
     string line;
     while (getline(file, line)) 
     {
-      stocks_.push_back(line);
+      stocks_.insert(line);
     }
     file.close();
   }

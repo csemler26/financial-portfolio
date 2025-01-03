@@ -5,7 +5,6 @@
 #include <mutex>
 #include <filesystem>
 #include <curl/curl.h>
-#include "../UltimateDSA/include/vector.h"
 #include "json.h"
 #include "dataTypes.h"
 #include "market.h"
@@ -23,9 +22,9 @@ public:
 private:
   void saveWatchlist();
   void loadWatchlist();
-  void fetchStockData(std::string& symbol);
+  void fetchStockData(const std::string& symbol);
 
-  DSA::Vector<std::string> stocks_;
+  UnorderedSet<std::string> stocks_;
   std::mutex printMutex_;
 };
 
