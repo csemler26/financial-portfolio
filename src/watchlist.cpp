@@ -9,14 +9,13 @@
 
 using namespace std;
 
-Watchlist::Watchlist()
+Watchlist::Watchlist(Database& db) : db_(db)
 {
   loadWatchlist();
 }
 
 Watchlist::~Watchlist()
 {
-  saveWatchlist();
 }
 
 void Watchlist::addSymbol(std::string &symbol)
@@ -29,15 +28,13 @@ void Watchlist::addSymbol(std::string &symbol)
   }
 
   stocks_.insert(symbol);
-  saveWatchlist();
-  cout << "Successfully added " << symbol << " from the watchlist" << endl;
+  db_.addStockToWatchlist(symbol);
 }
 
 void Watchlist::removeSymbol(std::string &symbol)
 {
-  stocks_.erase(symbol);
-  saveWatchlist();
-  cout << "Successfully removed " << symbol << " from the watchlist" << endl;
+  stocks_.erase(symbol);  
+  db_.removeStockFromWatchlist(symbol);
 }
 
 void Watchlist::fetchStockData(const std::string& symbol)
@@ -68,45 +65,10 @@ void Watchlist::printWatchList()
   }
 }
 
-void Watchlist::saveWatchlist()
-{
-  cout << "Saving watchlist at " << WATCHLIST_PATH << endl;
-  ofstream outFile(WATCHLIST_PATH);
-  if (!outFile) 
-  {
-    cerr << "Error saving watchlist: " << WATCHLIST_PATH << endl;
-    return;
-  }
-  
-  for (const auto& stock : stocks_) 
-  {
-    outFile << stock << endl;
-  }
-
-  outFile.close();
-}
-
 void Watchlist::loadWatchlist()
 {
-  if (!filesystem::exists(WATCHLIST_PATH))
-  {
-    cerr << "File does not exist at " << WATCHLIST_PATH << endl;
-    return;
-  }
-
-  ifstream file(WATCHLIST_PATH);
-  if (file.is_open())
-  {
-    string line;
-    while (getline(file, line)) 
-    {
-      stocks_.insert(line);
-    }
-    file.close();
-  }
-  else
-  {
-    cerr << "Failed to open file: " << WATCHLIST_PATH << endl;
-  }
+  cout << "Loading watchlist from SQL database" << endl;
+  db_.loadWatchlist(stocks_);
+  cout << "Done loading watchlist from SQL database" << endl;
 }
 

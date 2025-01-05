@@ -7,25 +7,26 @@
 #include <curl/curl.h>
 #include "json.h"
 #include "dataTypes.h"
+#include "database.h"
 #include "market.h"
 
 const std::filesystem::path WATCHLIST_PATH = "/var/financial-portfolio/watchlist.txt";
 
 class Watchlist {
 public:
-  Watchlist();
+  Watchlist(Database& db);
   ~Watchlist();
   void addSymbol(std::string& symbol);
   void removeSymbol(std::string& symbol);
   void printWatchList();
 
 private:
-  void saveWatchlist();
   void loadWatchlist();
   void fetchStockData(const std::string& symbol);
 
   UnorderedSet<std::string> stocks_;
   std::mutex printMutex_;
+  Database& db_;
 };
 
 #endif // WATCHLIST_H

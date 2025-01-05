@@ -49,16 +49,47 @@ size_t StockMarket::formatDataCallback(void *contents, size_t size, size_t nmemb
 
 Stock StockMarket::parseData(const string& symbol, string& readBuffer)
 {
+  // Stock output;
+  // try 
+  // {
+  //   auto jsonData = nlohmann::json::parse(readBuffer);
+  //   string priceStr = jsonData["Global Quote"]["05. price"];
+  //   double price = stod(priceStr);
+  //   string symbolUpper;
+  //   transform(symbol.begin(), symbol.end(), symbolUpper.begin(), ::toupper);
+  //   output.symbol = symbol;
+  //   output.price = price;
+  // } 
+  // catch (const exception& e) 
+  // {
+  //   cerr << "Failed to parse JSON: " << e.what() << endl;
+  // }    
+
+  // return output;
+
   Stock output;
+  string symbolUpper;
+  symbolUpper.resize(symbol.size());
+  transform(symbol.begin(), symbol.end(), symbolUpper.begin(), ::toupper);
+  output.symbol = symbolUpper;
+
   try 
   {
     auto jsonData = nlohmann::json::parse(readBuffer);
-    string priceStr = jsonData["Global Quote"]["05. price"];
-    double price = stod(priceStr);
-    string symbolUpper;
-    transform(symbol.begin(), symbol.end(), symbolUpper.begin(), ::toupper);
-    output.symbol = symbol;
-    output.price = price;
+
+    // Check if the key exists and is not null
+    if (jsonData.contains("Global Quote") && !jsonData["Global Quote"].is_null() &&
+        jsonData["Global Quote"].contains("05. price") && !jsonData["Global Quote"]["05. price"].is_null()) 
+    {
+      string priceStr = jsonData["Global Quote"]["05. price"];
+      double price = stod(priceStr);
+
+      output.price = price;
+    } 
+    else 
+    {
+      // cerr << "Price data not found in JSON response - max API calls used" << endl;
+    }
   } 
   catch (const exception& e) 
   {

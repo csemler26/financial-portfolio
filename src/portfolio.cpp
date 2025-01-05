@@ -8,7 +8,7 @@
 
 using namespace std;
 
-Portfolio::Portfolio()
+Portfolio::Portfolio(Database& db) : db_(db)
 {
   loadPortfolio();
 }

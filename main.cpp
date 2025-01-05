@@ -15,19 +15,34 @@ using namespace std;
 
 void init(Portfolio& portfolio, ParameterManager& paramManager)
 {
+  // TODO: Load portfolio on start up (shouldn't need to explicitly call loadPortfolio)
+  //    Use the watchlist as an example
   portfolio.loadPortfolio();
   portfolio.printPortfolio();
   paramManager.load_env_file();
 }
 
+void initDatabase(Database& db)
+{
+  if (db.executeScript("database/createTables.sql")) 
+  {
+    cout << "Tables created successfully." << endl;
+  } 
+  else 
+  {
+    cerr << "Failed to create tables." << endl;
+  }
+}
+
 int main()
 {
   string input;
-  Portfolio portfolio;
-  Watchlist watchlist;
   ParameterManager parameterManager;
   Database db("financial_portfolio.db");
+  initDatabase(db);
   
+  Portfolio portfolio(db);
+  Watchlist watchlist(db);
   init(portfolio, parameterManager);
 
   while (1)
@@ -105,18 +120,6 @@ int main()
       cin >> symbol;
 
       watchlist.removeSymbol(symbol);
-    }
-    // open database
-    else if (input == "db" || input == "database")
-    {
-      if (db.executeScript("database/createTables.sql")) 
-      {
-        cout << "Tables created successfully." << endl;
-      } 
-      else 
-      {
-        cerr << "Failed to create tables." << endl;
-      }
     }
     else if (input == "help")
     {
