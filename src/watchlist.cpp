@@ -18,57 +18,81 @@ Watchlist::~Watchlist()
 {
 }
 
-void Watchlist::addSymbol(std::string &symbol)
+void Watchlist::addSymbol(const std::string &symbol)
 {
-  // skip if duplicate
   if (stocks_.find(symbol) != stocks_.end())
   {
     cout << "Symbol already exists in the watchlist" << endl;
     return;
   }
-
-  stocks_.insert(symbol);
+  
+  stocks_[symbol] = Stock{symbol, 0.0};
   db_.addStockToWatchlist(symbol);
 }
 
-void Watchlist::removeSymbol(std::string &symbol)
+void Watchlist::removeSymbol(const std::string &symbol)
 {
   stocks_.erase(symbol);  
   db_.removeStockFromWatchlist(symbol);
 }
 
-void Watchlist::fetchStockData(const std::string& symbol)
+Stock Watchlist::fetchStockData(const std::string& symbol)
 {
   StockMarket market;
-  Stock stock = market.fetchMarketData(symbol);
-
-  lock_guard<mutex> guard(printMutex_);
-  cout << stock.symbol
-            << fixed << setprecision(2) 
-            << " : $" << stock.price << endl;
+  return market.fetchMarketData(symbol);
 }
 
-void Watchlist::printWatchList()
+void Watchlist::updateStockPrices()
 {
   vector<thread> threads;
-  for (auto& stock : stocks_) 
+  vector<Stock> fetchedStocks;
+  mutex dataMutex;
+
+  // Create threads to fetch stock data
+  for (auto& [symbol, stock] : stocks_) 
   {
-    threads.emplace_back([this, &stock]() 
+    threads.emplace_back([this, &dataMutex, &stock, &symbol]() 
     {
-      this->fetchStockData(stock);
+      Stock updatedStock = this->fetchStockData(symbol);
+      
+      // Store the fetched stock data in a thread-safe manner
+      lock_guard<mutex> guard(dataMutex);
+      stock = updatedStock;
     });
   }
 
+  // Join all threads
   for (auto& thread : threads) 
   {
     thread.join();
+  }
+
+  updateSqlTableValues();
+}
+  
+void Watchlist::printWatchList()
+{
+  lock_guard<mutex> guard(printMutex_);
+  for (const auto& [symbol, stock] : stocks_) 
+  {
+    cout << stock.symbol
+         << fixed << setprecision(2)
+         << " : $" << stock.price << endl;
+  }
+}
+
+// TODO: update this function
+// Is it needed? - add method headers to existing functions to clarify their purpose
+void Watchlist::updateSqlTableValues()
+{
+  for (const auto& [symbol, stock] : stocks_) 
+  {
+    db_.insertOrUpdateStockPrice(stock.symbol, stock.price);
   }
 }
 
 void Watchlist::loadWatchlist()
 {
-  cout << "Loading watchlist from SQL database" << endl;
   db_.loadWatchlist(stocks_);
-  cout << "Done loading watchlist from SQL database" << endl;
 }
 

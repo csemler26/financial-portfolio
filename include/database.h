@@ -12,9 +12,10 @@ public:
   bool executeScript(const std::string& scriptFilePath);
   sqlite3_stmt* prepareStatement(const std::string& query);
 
-  void loadWatchlist(UnorderedSet<std::string>& watchlist);
+  void loadWatchlist(UnorderedMap<std::string, Stock>& watchlist);
   void addStockToWatchlist(const std::string& stockName);
   void removeStockFromWatchlist(const std::string& stockName);
+  void insertOrUpdateStockPrice(const std::string& stockName, double stockPrice);
 
 private:
   sqlite3* db_;

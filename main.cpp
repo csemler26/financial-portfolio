@@ -101,6 +101,7 @@ int main()
     // view my watchlist
     else if (input == "watch" || input == "watchlist")
     {
+      watchlist.updateStockPrices();
       watchlist.printWatchList();
     }
     // add a stock to my watchlist

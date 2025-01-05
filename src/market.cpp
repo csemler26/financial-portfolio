@@ -31,10 +31,6 @@ Stock StockMarket::fetchMarketData(const std::string& symbol)
 
     curl_easy_cleanup(curl);
   }
-  else
-  {
-    cout << "darn";
-  }
 
   return output;
 }
@@ -49,24 +45,6 @@ size_t StockMarket::formatDataCallback(void *contents, size_t size, size_t nmemb
 
 Stock StockMarket::parseData(const string& symbol, string& readBuffer)
 {
-  // Stock output;
-  // try 
-  // {
-  //   auto jsonData = nlohmann::json::parse(readBuffer);
-  //   string priceStr = jsonData["Global Quote"]["05. price"];
-  //   double price = stod(priceStr);
-  //   string symbolUpper;
-  //   transform(symbol.begin(), symbol.end(), symbolUpper.begin(), ::toupper);
-  //   output.symbol = symbol;
-  //   output.price = price;
-  // } 
-  // catch (const exception& e) 
-  // {
-  //   cerr << "Failed to parse JSON: " << e.what() << endl;
-  // }    
-
-  // return output;
-
   Stock output;
   string symbolUpper;
   symbolUpper.resize(symbol.size());

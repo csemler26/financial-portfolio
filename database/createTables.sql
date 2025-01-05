@@ -30,9 +30,9 @@ CREATE TABLE IF NOT EXISTS watchlist_stocks (
 );
 
 -- Table to store stock names and their prices
--- CREATE TABLE IF NOT EXISTS watchlist_stock_prices (
---     stock_id INTEGER PRIMARY KEY,
---     stock_name TEXT NOT NULL,
---     stock_price REAL,
---     FOREIGN KEY (stock_id) REFERENCES stocks(stock_id)
--- );
+CREATE TABLE IF NOT EXISTS watchlist_stock_prices (
+    stock_id INTEGER PRIMARY KEY,
+    stock_name TEXT NOT NULL,
+    stock_price REAL,
+    FOREIGN KEY (stock_id) REFERENCES stocks(stock_id)
+);

@@ -50,7 +50,7 @@ sqlite3_stmt* Database::prepareStatement(const std::string& query) {
   return stmt;
 }
 
-void Database::loadWatchlist(UnorderedSet<std::string>& watchlist) 
+void Database::loadWatchlist(UnorderedMap<std::string, Stock>& watchlist) 
 {
   std::string sql = "SELECT stock_name FROM watchlist_stocks;";
   sqlite3_stmt* stmt = prepareStatement(sql);
@@ -59,7 +59,7 @@ void Database::loadWatchlist(UnorderedSet<std::string>& watchlist)
     while (sqlite3_step(stmt) == SQLITE_ROW) 
     {
       std::string stockName = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
-      watchlist.insert(stockName);
+      watchlist[stockName] = Stock{stockName, 0.0};
     }
     sqlite3_finalize(stmt);
   }
@@ -86,5 +86,26 @@ void Database::removeStockFromWatchlist(const std::string& stockName)
     sqlite3_bind_text(stmt, 1, stockName.c_str(), -1, SQLITE_STATIC);
     sqlite3_step(stmt);
     sqlite3_finalize(stmt);
+  }
+}
+void Database::insertOrUpdateStockPrice(const std::string& stockName, double stockPrice) 
+{
+  std::string sql = R"(
+    INSERT INTO watchlist_stock_prices (stock_name, stock_price)
+    VALUES (?, ?)
+    ON CONFLICT(stock_name) DO UPDATE SET stock_price = excluded.stock_price;
+  )";
+  sqlite3_stmt* stmt = prepareStatement(sql);
+  if (stmt) 
+  {
+    sqlite3_bind_text(stmt, 1, stockName.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_double(stmt, 2, stockPrice);
+    if (sqlite3_step(stmt) != SQLITE_DONE) 
+    {
+      std::cerr << "Error inserting or updating stock price: " << sqlite3_errmsg(db_) << std::endl;
+    }
+    sqlite3_finalize(stmt);
+  } else {
+    std::cerr << "Failed to prepare statement for inserting or updating stock price" << std::endl;
   }
 }

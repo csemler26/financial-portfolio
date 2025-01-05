@@ -36,7 +36,6 @@ using UnorderedSet = std::unordered_set<K>;
 
 typedef struct stock_t {
   std::string symbol;
-  std::string name;
   double price;
 } Stock;
 
